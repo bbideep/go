@@ -1,0 +1,7 @@
+FROM iron/go as builder
+
+WORKDIR /app
+
+ADD avatar_name_spitter /app/
+
+ENTRYPOINT ["./avatar_name_spitter"]
