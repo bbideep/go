@@ -1,0 +1,14 @@
+# This Dockerfile performs a multi stage build
+
+# Build the executable binary
+FROM golang:alpine as builder
+RUN mkdir /build
+ADD . /build/
+WORKDIR /build
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o avatar_name_spitter .
+
+# Build the final small image now
+FROM scratch
+COPY --from=builder /build/avatar_name_spitter /avatar_name_spitter/
+WORKDIR /avatar_name_spitter
+CMD ["./avatar_name_spitter"]
